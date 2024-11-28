@@ -5,7 +5,7 @@ import Header from "./components/header";
 import Footer from "./components/footer";
 import { SearchProvider } from "./components/searchContext";
 import { FavoriteProvider } from "./components/favoriteContext";
-import { AuthProvider } from "./components/authContext";
+import { AuthProvider } from "./components/authContext";//ádasdasdasd
 
 export const metadata: Metadata = {
   title: "Cửa hàng laptop",
