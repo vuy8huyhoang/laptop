@@ -4,8 +4,8 @@ import "./globals.css";
 import Header from "./components/header";
 import Footer from "./components/footer";
 import { SearchProvider } from "./components/searchContext";
-import { FavoriteProvider } from "./components/favoriteContext";
-import { AuthProvider } from "./components/authContext";//ádasdasdasd
+import { FavoriteProvider } from "./components/favoriteContext";//sadasdasdas
+import { AuthProvider } from "./components/authContext";//lllllllllládasdasdasdsdasdasdasd
 
 export const metadata: Metadata = {
   title: "Cửa hàng laptop",
