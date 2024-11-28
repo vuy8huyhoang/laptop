@@ -1,0 +1,81 @@
+.laptop-animation {
+    animation: laptop-open 2s ease-in-out infinite alternate;
+}
+
+@keyframes laptop-open {
+    0% {
+        transform: rotateX(90deg);
+    }
+
+    50% {
+        transform: rotateX(45deg);
+    }
+
+    100% {
+        transform: rotateX(0deg);
+    }
+}
+
+.text-gradient {
+    background: linear-gradient(90deg, #6a5acd, #ff6347, #1e90ff, #32cd32);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-shift 5s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Flicker Animation */
+.text-flicker {
+    animation: flicker 3s infinite;
+}
+
+@keyframes flicker {
+
+    0%,
+    19%,
+    21%,
+    23%,
+    25%,
+    54%,
+    56%,
+    100% {
+        opacity: 1;
+    }
+
+    20%,
+    24%,
+    55% {
+        opacity: 0.5;
+    }
+}
+
+/* Zoom-In Animation */
+.text-zoom {
+    animation: zoom-in 2s ease-out;
+}
+
+@keyframes zoom-in {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
