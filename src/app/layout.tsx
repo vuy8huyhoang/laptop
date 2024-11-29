@@ -10,6 +10,7 @@ import { AuthProvider } from "./components/authContext";
 export const metadata: Metadata = {
   title: "Cửa hàng laptop",
   description: "Chuyên cung cấp sản phẩm điện tử như:máy tính,laptop",
+  
 };
 
 export default function RootLayout({

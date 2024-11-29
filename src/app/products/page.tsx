@@ -1,18 +1,13 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import ListCard from '../components/listcard'; // Ensure ListCard is correctly imported
+import React, { useState } from 'react';
+import useSWR from 'swr'; 
+import ListCard from '../components/listcard';
 
-interface Product {
-    id: number;
-    ten: string;
-    gia_km: number;
-    gia: number;
-    id_nhasx: number;
-    hinh: string;
-}
+
+
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export default function ProductPage() {
-    const [data, setData] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,28 +17,15 @@ export default function ProductPage() {
     const [maxPrice, setMaxPrice] = useState(100000000);
     const itemsPerPage = 20;
 
-    useEffect(() => {
-        fetch('http://localhost:3001/allsp')
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then((responseData: Product[]) => {
-                setData(responseData);
-                setLoading(false);
-            })
-            .catch((error) => {
-                setError(error.message);
-                setLoading(false);
-            });
-    }, []);
+    const { data, error: swrError } = useSWR<Product[]>('http://localhost:3001/allsp', fetcher);
 
-    if (loading)
+    if (swrError) {
+        setError(swrError.message);
+    }
+
+    if (!data) {
         return <div className="text-center text-lg font-semibold text-gray-500">Đang tải dữ liệu...</div>;
-    if (error)
-        return <div className="text-center text-lg font-semibold text-red-500">Lỗi: {error}</div>;
+    }
 
     const filteredData = data
         .filter((item) =>
@@ -84,8 +66,6 @@ export default function ProductPage() {
         }
     };
 
-
-
     const handlePageChange = (page: number) => {
         if (page > 0 && page <= totalPages) {
             setCurrentPage(page);
@@ -112,7 +92,6 @@ export default function ProductPage() {
 
     return (
         <div className="mx-auto max-w-7xl px-6 py-16">
-            {/* Header tìm kiếm */}
             <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
                 <input
                     type="text"
@@ -133,7 +112,6 @@ export default function ProductPage() {
                 </select>
             </div>
 
-            {/* Bộ lọc giá */}
             <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-col">
                     <label htmlFor="minPrice" className="text-sm font-medium text-gray-700">
@@ -167,7 +145,6 @@ export default function ProductPage() {
                 </div>
             </div>
 
-            {/* Danh sách sản phẩm */}
             <ListCard data={paginatedData} />
 
             <div className="flex justify-center items-center mt-8 space-x-2">

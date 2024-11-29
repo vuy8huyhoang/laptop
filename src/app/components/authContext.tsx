@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
     const login = (token: string, refresh: string) => {
-        document.cookie = `accessToken=${token}; path=/; Max-Age=5`; 
+        document.cookie = `accessToken=${token}; path=/; Max-Age=60`; 
         document.cookie = `refreshToken=${refresh}; path=/; Max-Age=2592000`; 
         setAuthenticated(true);
         setAccessToken(token);

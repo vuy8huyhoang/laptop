@@ -1,6 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
+import useSWR from 'swr';
 
 import {
     Dialog,
@@ -21,38 +22,25 @@ const navigation = {
         { name: 'Sản phẩm', href: '/products', icon: '/laptop (4).png' },
     ],
 };
-
-
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Example() {
     const router = useRouter();
     const [open, setOpen] = useState(false);
     const { keyword, setKeyword } = useContext(SearchContext);
-    const [manufacturers, setManufacturers] = useState<Category[]>([]);
-    const [error, setError] = useState<string | null>(null);
-    const { favoriteItems } = useFavorite(); 
-    const favoritesCount= favoriteItems.length; 
+    const { favoriteItems } = useFavorite();
+    const favoritesCount = favoriteItems.length;
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen2, setIsOpen2] = useState(false);
     const { authenticated, logout } = useAuth();
     const cartItems = useSelector((state: any) => state.cart?.items || []);
     const count = cartItems.length;
 
-    useEffect(() => {
-        fetch('http://localhost:3001/list_nhasx')
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then((responseData: Category[]) => {
-                setManufacturers(responseData);
-            })
-            .catch((error) => {
-                setError(error.message);
-            });
-    }, []);
+    const { data: manufacturers, error } = useSWR('http://localhost:3001/list_nhasx', fetcher);
+
+    if (error) {
+        console.log(error);
+    }
 
     return (
         <div className="fixed top-0 right-0 mb-[120px] w-full z-50 bg-gradient-to-r from-blue-900 via-purple-800 to-indigo-900 text-white">
@@ -136,12 +124,12 @@ export default function Example() {
                                                     className="w-[250px] h-[250px] rounded-lg border border-gray-200"
                                                 />
 
-                                                <ul className={`py-2 text-sm ${manufacturers.length > 5 ? 'grid grid-cols-2 gap-2' : 'flex flex-col'}`}>
-                                                    {manufacturers.length > 0 ? (
-                                                        manufacturers.map((manufacturer) => (
+                                                <ul className={`py-2 text-sm ${manufacturers?.length > 5 ? 'grid grid-cols-2 gap-2' : 'flex flex-col'}`}>
+                                                    {manufacturers ? (
+                                                        manufacturers.map((manufacturer:any) => (
                                                             <li key={manufacturer.id}>
                                                                 <Link
-                                                                    href={`/products/${manufacturer.id}`} 
+                                                                    href={`/products/${manufacturer.id}`}
                                                                     className="block text-center px-6 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-md transition-colors duration-300"
                                                                     onClick={(e) => {
                                                                         e.preventDefault();
@@ -160,17 +148,9 @@ export default function Example() {
                                             </div>
                                         </Popover.Panel>
                                     )}
-
-
-
-
-
                                 </Popover>
                             ))}
                         </PopoverGroup>
-
-
-
 
                         <div className="flex items-center space-x-6">
                             <div className="relative rounded-full bg-white text-gray-700 shadow-md">
@@ -182,7 +162,7 @@ export default function Example() {
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter" && keyword.trim() !== "") {
                                             e.preventDefault();
-                                            router.push(`/timkiem`); 
+                                            router.push(`/timkiem`);
                                         }
                                     }}
                                     className="w-32 sm:w-48 px-4 py-1.5 text-sm rounded-full focus:outline-none animate-typing-placeholder"
@@ -199,29 +179,29 @@ export default function Example() {
                                 className="relative p-2 hover:text-red-500 transition"
                                 aria-label="Favorites"
                             >
-                            <div className="relative">
-                                
+                                <div className="relative">
+
                                     <HeartIcon className="h-6 w-6" />
-                                    
+
                                     <span className="absolute top-[-5px] right-[0px] -mt-1 -mr-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                                            {favoritesCount}
-                                        </span>
-                                    
+                                        {favoritesCount}
+                                    </span>
+
                                 </div>
                             </Link>
 
-                            <Link href="/cart" 
+                            <Link href="/cart"
                                 className="relative p-2 hover:text-gray-300 transition">
-                            <div className="relative">
-                                
-                                    
-                                
+                                <div className="relative">
+
+
+
                                     <ShoppingBagIcon className="h-6 w-6" />
                                     <span className="absolute top-[-5px] right-0 -mt-1 -mr-1 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-500 text-xs text-white">
                                         {count}
                                     </span>
-                            </div>
-                        </Link>
+                                </div>
+                            </Link>
 
                             <Popover className="relative">
                                 <Popover.Button
@@ -252,8 +232,8 @@ export default function Example() {
                                                         <Link href="#"
                                                             onClick={() => {
                                                                 logout();
-                                                                setIsOpen(false); 
-                                                                                                                            }}
+                                                                setIsOpen(false);
+                                                            }}
                                                             className="block text-center px-6 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-md transition-colors duration-300"
                                                         >
                                                             Đăng xuất
@@ -266,7 +246,7 @@ export default function Example() {
                                                         <Link
                                                             href="/login"
                                                             onClick={() => setIsOpen(false)}
-                                                                className="block text-center px-6 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-md transition-colors duration-300"
+                                                            className="block text-center px-6 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-md transition-colors duration-300"
                                                         >
                                                             Đăng nhập
                                                         </Link>
@@ -275,7 +255,7 @@ export default function Example() {
                                                         <Link
                                                             href="/register"
                                                             onClick={() => setIsOpen(false)}
-                                                                className="block text-center px-6 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-md transition-colors duration-300"
+                                                            className="block text-center px-6 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-md transition-colors duration-300"
                                                         >
                                                             Đăng ký
                                                         </Link>
@@ -293,4 +273,3 @@ export default function Example() {
         </div>
     );
 }
-

@@ -55,6 +55,7 @@ const SignupForm = () => {
                 localStorage.setItem('userEmail', values.email);
                 setIsModalOpen(true);
                 setMessage(data.message || 'Đăng ký thành công.Vui lòng kiểm tra email để kích hoạt tài khoản.');
+  
             }
         } catch (error) {
             console.log('Lỗi kết nối:', error);

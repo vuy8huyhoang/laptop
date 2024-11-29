@@ -15,6 +15,12 @@ export default function Banner() {
         "Dòng laptop gamming hiệu năng cao!"
     ];
 
+    const pText = [
+        "Laptop văn phòng mỏng nhẹ!",
+        "Macbook kiểu dáng sang trọng!",
+        "Laptop chuyên cho thiết kế đồ họa!",
+        "Dòng laptop gamming hiệu năng cao!"
+    ];
     const bannerImages = [
         "/laptop (1).png",
         "/laptop (2).png",
@@ -22,6 +28,12 @@ export default function Banner() {
         "/laptop (4).png",
     ];
 
+    const bannerButton = [
+        "Khám phá ngay",
+        "Khám phá ngay",
+        "Khám phá ngay",
+        "Khám phá ngay",
+    ];
     const nextText = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % bannerText.length);
     };
@@ -44,14 +56,14 @@ export default function Banner() {
                         {bannerText[currentIndex]}
                     </h1>
                     <p className="text-lg sm:text-xl font-light text-gray-300 animate-slide-up">
-                        Tận hưởng những chương trình khuyến mãi hấp dẫn dành cho bạn!
+                        {pText[currentIndex]}
                     </p>
                     <Link href='/products'>
                         <ShimmerButton
                             onClick={nextText}
                             className="mt-6 px-6 py-3 bg-gradient-to-r from-indigo-500 to-indigo-700 text-white rounded-full shadow-lg hover:bg-indigo-800 transition-all duration-300 transform hover:scale-105"
                         >
-                            Khám Phá Ngay
+                            {bannerButton[currentIndex]}
                         </ShimmerButton>
                     </Link>
                 </div>
@@ -60,7 +72,7 @@ export default function Banner() {
                     <img
                         src={bannerImages[currentIndex]}
                         alt={`Laptop ${currentIndex + 1}`}
-                        className="w-[1/2] transform scale-95 hover:scale-100 transition-all duration-300 shadow-lg"
+                        className="w-[1/2] transform scale-95 hover:scale-100 transition-all duration-300"
                     />
                 </div>
             </div>

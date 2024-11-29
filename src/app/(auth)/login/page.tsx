@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import * as Yup from 'yup';
-import Modal from "../../components/modal";
 import { useAuth } from '../../components/authContext';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { BorderBeam } from "@/app/components/ui/border-beam";
@@ -14,8 +13,6 @@ const LoginForm = () => {
     const { login } = useAuth();
     const router = useRouter();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [message, setMessage] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
     const validationSchema = Yup.object().shape({
@@ -45,6 +42,7 @@ const LoginForm = () => {
                 }
                 if (response.status === 401) {
                     setErrorMessage(data.message || 'Vui lòng xác minh tài khoản trước khi đăng nhập');
+                    localStorage.setItem('userEmail', values.email);
                     router.push("/verify");
                 }
             }
@@ -52,12 +50,9 @@ const LoginForm = () => {
 
             if (data.accessToken && data.refreshToken) {
                 login(data.accessToken, data.refreshToken);
-                setIsModalOpen(true);
-                setMessage(data.message || 'Đăng nhập thành công.');
                 setErrorMessage(null);
-                setTimeout(() => {
-                    router.push('/profile');
-                }, 2000);
+                router.push('/profile');
+
             }
         } catch (error) {
             console.error('Lỗi kết nối:', error);
@@ -183,11 +178,7 @@ const LoginForm = () => {
                             </button>
                         </div>
                     </div>
-                    <Modal
-                        isOpen={isModalOpen}
-                        message={message}
-                        onClose={() => setIsModalOpen(false)}
-                    />
+
                 </Form>
             )}
         </Formik>

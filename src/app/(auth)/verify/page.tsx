@@ -8,7 +8,7 @@ export default function Verify() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const emailvalue = localStorage.getItem('userEmail')||"";
     const validationSchema = Yup.object().shape({
         email: Yup.string()
             .email("Email không hợp lệ")
@@ -66,14 +66,13 @@ export default function Verify() {
                         Xác minh Email
                     </h1>
                     <p className="mt-2 text-sm text-gray-200 font-light font-poppins">
-                        Nhập email đã đăng ký để nhận lại mã xác thực tài khoản của bạn.
+                        Nhập email đã đăng ký để nhận lại link xác thực tài khoản của bạn.
                     </p>
                 </div>
 
                 <div className="mt-8 space-y-6">
-                    {/* Formik Form */}
                     <Formik
-                        initialValues={{ email: "" }}
+                        initialValues={{ email: emailvalue }}
                         validationSchema={validationSchema}
                         onSubmit={handleSubmit}
                     >
@@ -84,12 +83,13 @@ export default function Verify() {
                                         htmlFor="email"
                                         className="block text-sm font-medium text-gray-100 font-poppins"
                                     >
-                                        Nhập địa chỉ Email đã đăng ký
+                                        Địa chỉ Email đã đăng ký
                                     </label>
                                     <Field
                                         name="email"
                                         type="email"
                                         placeholder="Nhập email của bạn"
+                                        disabled
                                         className={`block w-full mt-2 rounded-lg border border-gray-300 bg-white/20 py-2 px-4 text-white placeholder-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-400 sm:text-sm font-poppins ${errors.email && touched.email ? "border-red-500" : ""
                                             }`}
                                     />
@@ -107,7 +107,7 @@ export default function Verify() {
                                         className={`w-full rounded-lg bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 py-3 px-6 text-sm font-bold text-white shadow-lg hover:shadow-xl hover:opacity-90 transition-transform duration-300 ease-in-out transform hover:-translate-y-1 font-poppins ${loading ? "bg-gray-400" : ""
                                             }`}
                                     >
-                                        {loading ? "Đang gửi..." : "Gửi mã xác thực"}
+                                        {loading ? "Đang gửi..." : "Gửi link xác thực"}
                                     </button>
                                 </div>
                             </Form>

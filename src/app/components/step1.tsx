@@ -134,8 +134,8 @@ export default function Step1({
                         </div>
 
                         <div className="flex justify-between items-center mt-6 border-t pt-4">
-                            <p className="text-lg font-medium text-gray-600">Phí giao hàng:</p>
-                            <p className="text-lg font-semibold text-gray-800">
+                            <p className="font-medium text-gray-600">Phí giao hàng:</p>
+                            <p className="font-medium text-gray-800">
                                 {shippingCost === 0
                                     ? "Miễn phí"
                                     : `${shippingCost.toLocaleString("vi-VN")} VND`}
